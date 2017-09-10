@@ -16,12 +16,13 @@
  * @version: 1.0.0
  *******************************************************************************/
 
-package org.edgexfoundry.controller;
+package org.edgexfoundry.controller.impl;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
+import org.edgexfoundry.controller.EventClient;
 import org.edgexfoundry.core.client.ConsulDiscoveryClientTemplate;
 import org.edgexfoundry.domain.core.Event;
 import org.edgexfoundry.domain.core.Reading;
@@ -49,13 +50,13 @@ public class EventClientImpl extends ConsulDiscoveryClientTemplate implements Ev
   }
 
   @Override
-  public List<Event> eventsForDevice(String deviceId, int limit) {
-    return getClient().eventsForDevice(deviceId, limit);
+  public List<Event> events(long start, long end, int limit) {
+    return getClient().events(start, end, limit);
   }
 
   @Override
-  public List<Event> events(long start, long end, int limit) {
-    return getClient().events(start, end, limit);
+  public List<Event> eventsForDevice(String deviceId, int limit) {
+    return getClient().eventsForDevice(deviceId, limit);
   }
 
   @Override

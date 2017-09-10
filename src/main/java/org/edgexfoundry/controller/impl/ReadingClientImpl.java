@@ -16,12 +16,13 @@
  * @version: 1.0.0
  *******************************************************************************/
 
-package org.edgexfoundry.controller;
+package org.edgexfoundry.controller.impl;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
+import org.edgexfoundry.controller.ReadingClient;
 import org.edgexfoundry.core.client.ConsulDiscoveryClientTemplate;
 import org.edgexfoundry.domain.core.Reading;
 import org.edgexfoundry.exception.controller.DataValidationException;

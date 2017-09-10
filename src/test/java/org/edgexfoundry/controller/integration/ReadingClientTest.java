@@ -30,14 +30,15 @@ import java.util.List;
 import javax.ws.rs.NotFoundException;
 
 import org.edgexfoundry.controller.ReadingClient;
-import org.edgexfoundry.controller.ReadingClientImpl;
 import org.edgexfoundry.controller.ValueDescriptorClient;
-import org.edgexfoundry.controller.ValueDescriptorClientImpl;
+import org.edgexfoundry.controller.impl.ReadingClientImpl;
+import org.edgexfoundry.controller.impl.ValueDescriptorClientImpl;
 import org.edgexfoundry.domain.common.IoTType;
 import org.edgexfoundry.domain.common.ValueDescriptor;
 import org.edgexfoundry.domain.core.Reading;
 import org.edgexfoundry.test.category.RequiresCoreDataRunning;
 import org.edgexfoundry.test.category.RequiresMongoDB;
+import org.edgexfoundry.test.data.DeviceData;
 import org.edgexfoundry.test.data.EventData;
 import org.edgexfoundry.test.data.ReadingData;
 import org.edgexfoundry.test.data.ValueDescriptorData;
@@ -85,16 +86,16 @@ public class ReadingClientTest {
   // cleanup tests the delete function
   @After
   public void cleanup() {
-    List<Reading> rs = client.readings();
-    rs.forEach((r) -> client.delete(r.getId()));
-    List<ValueDescriptor> vds = vdClient.valueDescriptors();
-    vds.forEach((v) -> vdClient.delete(v.getId()));
+    List<Reading> readings = client.readings();
+    readings.forEach((reading) -> client.delete(reading.getId()));
+    List<ValueDescriptor> valueDescriptors = vdClient.valueDescriptors();
+    valueDescriptors.forEach((valueDescriptor) -> vdClient.delete(valueDescriptor.getId()));
   }
 
   @Test
   public void testReading() {
-    Reading r = client.reading(id);
-    checkTestData(r, id);
+    Reading reading = client.reading(id);
+    checkTestData(reading, id);
   }
 
   @Test(expected = NotFoundException.class)
@@ -104,15 +105,21 @@ public class ReadingClientTest {
 
   @Test
   public void testReadings() {
-    List<Reading> rs = client.readings();
-    assertEquals("Find all not returning a list with one reading", 1, rs.size());
-    checkTestData(rs.get(0), id);
+    List<Reading> readings = client.readings();
+    assertEquals("Find all not returning a list with one reading", 1, readings.size());
+    checkTestData(readings.get(0), id);
+  }
+
+  @Test
+  public void testReadingsForDevice() { // metadata not up and no devices in database
+    List<Reading> readings = client.readings(DeviceData.TEST_NAME, LIMIT);
+    assertEquals("Find all for device not returning a list with no reading", 0, readings.size());
   }
 
   @Test
   public void testReadingByName() {
-    List<Reading> rs = client.readingsByName(TEST_NAME, LIMIT);
-    checkTestData(rs.get(0), id);
+    List<Reading> readings = client.readingsByName(TEST_NAME, LIMIT);
+    checkTestData(readings.get(0), id);
   }
 
   @Test
@@ -122,8 +129,8 @@ public class ReadingClientTest {
 
   @Test
   public void testReadingByNameAndDevice() {
-    List<Reading> rs = client.readingsByNameAndDevice(TEST_NAME, EventData.TEST_DEVICE_ID, LIMIT);
-    checkTestData(rs.get(0), id);
+    List<Reading> readings = client.readingsByNameAndDevice(TEST_NAME, EventData.TEST_DEVICE_ID, LIMIT);
+    checkTestData(readings.get(0), id);
   }
 
   @Test
@@ -134,41 +141,41 @@ public class ReadingClientTest {
 
   @Test
   public void testReadingsByLabel() {
-    List<Reading> rs = client.readingsByLabel(ValueDescriptorData.TEST_LABELS[0], LIMIT);
-    assertEquals("Find by label not returning a list with one reading", 1, rs.size());
-    checkTestData(rs.get(0), id);
+    List<Reading> readings = client.readingsByLabel(ValueDescriptorData.TEST_LABELS[0], LIMIT);
+    assertEquals("Find by label not returning a list with one reading", 1, readings.size());
+    checkTestData(readings.get(0), id);
   }
 
   @Test
   public void testReadingsByLabelWithNoneMatching() {
-    List<Reading> rs = client.readingsByLabel("badlabel", LIMIT);
-    assertTrue("Reading found with bad label", rs.isEmpty());
+    List<Reading> readings = client.readingsByLabel("badlabel", LIMIT);
+    assertTrue("Reading found with bad label", readings.isEmpty());
   }
 
   @Test
   public void testReadingsByUoMLabel() {
-    List<Reading> rs = client.readingsByUoMLabel(ValueDescriptorData.TEST_UOMLABEL, LIMIT);
-    assertEquals("Find by UOM label not returning a list with one reading", 1, rs.size());
-    checkTestData(rs.get(0), id);
+    List<Reading> readings = client.readingsByUoMLabel(ValueDescriptorData.TEST_UOMLABEL, LIMIT);
+    assertEquals("Find by UOM label not returning a list with one reading", 1, readings.size());
+    checkTestData(readings.get(0), id);
   }
 
   @Test
   public void testReadingsByUOMLabelWithNoneMatching() {
-    List<Reading> rs = client.readingsByUoMLabel("badlable", LIMIT);
-    assertTrue("Reading found with bad UOM label", rs.isEmpty());
+    List<Reading> readings = client.readingsByUoMLabel("badlable", LIMIT);
+    assertTrue("Reading found with bad UOM label", readings.isEmpty());
   }
 
   @Test
   public void testReadingsByType() {
-    List<Reading> rs = client.readingsByType(ValueDescriptorData.TEST_TYPE.toString(), LIMIT);
-    assertEquals("Find by UOM label not returning a list with one reading", 1, rs.size());
-    checkTestData(rs.get(0), id);
+    List<Reading> readings = client.readingsByType(ValueDescriptorData.TEST_TYPE.toString(), LIMIT);
+    assertEquals("Find by UOM label not returning a list with one reading", 1, readings.size());
+    checkTestData(readings.get(0), id);
   }
 
   @Test
   public void testReadingsByTypeWithNoneMatching() {
-    List<Reading> rs = client.readingsByType(IoTType.F.toString(), LIMIT);
-    assertTrue("Reading found with bad type", rs.isEmpty());
+    List<Reading> readings = client.readingsByType(IoTType.F.toString(), LIMIT);
+    assertTrue("Reading found with bad type", readings.isEmpty());
   }
 
   @Test(expected = NotFoundException.class)
@@ -178,15 +185,15 @@ public class ReadingClientTest {
 
   @Test
   public void testUpdate() {
-    Reading r = client.reading(id);
-    r.setOrigin(12345);
-    assertTrue("Update did not complete successfully", client.update(r));
-    Reading r2 = client.reading(id);
-    assertEquals("Update did not work correclty", 12345, r2.getOrigin());
-    assertNotNull("Modified date is null", r2.getModified());
-    assertNotNull("Create date is null", r2.getCreated());
+    Reading reading = client.reading(id);
+    reading.setOrigin(12345);
+    assertTrue("Update did not complete successfully", client.update(reading));
+    Reading reading2 = client.reading(id);
+    assertEquals("Update did not work correclty", 12345, reading2.getOrigin());
+    assertNotNull("Modified date is null", reading2.getModified());
+    assertNotNull("Create date is null", reading2.getCreated());
     assertTrue("Modified date and create date should be different after update",
-        r2.getModified() != r2.getCreated());
+        reading2.getModified() != reading2.getCreated());
   }
 
 }

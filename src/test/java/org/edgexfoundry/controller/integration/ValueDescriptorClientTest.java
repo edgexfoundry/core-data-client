@@ -32,10 +32,11 @@ import java.util.List;
 import javax.ws.rs.NotFoundException;
 
 import org.edgexfoundry.controller.ValueDescriptorClient;
-import org.edgexfoundry.controller.ValueDescriptorClientImpl;
+import org.edgexfoundry.controller.impl.ValueDescriptorClientImpl;
 import org.edgexfoundry.domain.common.ValueDescriptor;
 import org.edgexfoundry.test.category.RequiresCoreDataRunning;
 import org.edgexfoundry.test.category.RequiresMongoDB;
+import org.edgexfoundry.test.data.DeviceData;
 import org.edgexfoundry.test.data.ValueDescriptorData;
 import org.junit.After;
 import org.junit.Before;
@@ -70,8 +71,8 @@ public class ValueDescriptorClientTest {
   // cleanup tests the delete function
   @After
   public void cleanup() {
-    List<ValueDescriptor> vs = client.valueDescriptors();
-    vs.forEach((v) -> client.delete(v.getId()));
+    List<ValueDescriptor> valueDescriptors = client.valueDescriptors();
+    valueDescriptors.forEach((valueDescriptor) -> client.delete(valueDescriptor.getId()));
   }
 
   @Test
@@ -108,6 +109,16 @@ public class ValueDescriptorClientTest {
     List<ValueDescriptor> vds = client.valueDescriptorByLabel(TEST_LABELS[0]);
     assertEquals("Find by label not returning a list with one value descriptor", 1, vds.size());
     checkTestData(vds.get(0), id);
+  }
+
+  @Test(expected = NotFoundException.class) // metadata not running and device not there
+  public void testValueDescriptorsForDeviceByName() {
+    client.valueDescriptorsForDeviceByName(DeviceData.TEST_NAME);
+  }
+
+  @Test(expected = NotFoundException.class) // metadata not running and device not there
+  public void testValueDescriptorsForDeviceById() {
+    client.valueDescriptorsForDeviceById("123");
   }
 
   @Test

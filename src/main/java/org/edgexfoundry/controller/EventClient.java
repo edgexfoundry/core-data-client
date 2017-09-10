@@ -41,13 +41,13 @@ public interface EventClient {
   List<Event> events();
 
   @GET
-  @Path("/device/{deviceId:.+}/{limit}")
-  List<Event> eventsForDevice(@PathParam("deviceId") String deviceId,
+  @Path("/{start}/{end}/{limit}")
+  List<Event> events(@PathParam("start") long start, @PathParam("end") long end,
       @PathParam("limit") int limit);
 
   @GET
-  @Path("/{start}/{end}/{limit}")
-  List<Event> events(@PathParam("start") long start, @PathParam("end") long end,
+  @Path("/device/{deviceId:.+}/{limit}")
+  List<Event> eventsForDevice(@PathParam("deviceId") String deviceId,
       @PathParam("limit") int limit);
 
   @GET

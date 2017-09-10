@@ -30,12 +30,12 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 
 public abstract class ConsulDiscoveryClientTemplate {
 
-  public final static String APP_ID = "edgex-core-data";
-  private static boolean IS_CACHE_DISCOVERY_RESULT = false;
+  public static final String APP_ID = "edgex-core-data";
+  private static boolean isCacheDiscoveryResult = false;
 
   @Value("${client.is-cache-discovery-result:false}")
-  public void setIsCacheDiscoveryResult(boolean flag) {
-    IS_CACHE_DISCOVERY_RESULT = flag;
+  public static void setIsCacheDiscoveryResult(boolean flag) {
+    isCacheDiscoveryResult = flag;
   }
 
   @Autowired
@@ -57,7 +57,7 @@ public abstract class ConsulDiscoveryClientTemplate {
     }
 
     List<ServiceInstance> list = discoveryClient.getInstances(APP_ID);
-    if (list != null && list.size() > 0) {
+    if (list != null && !list.isEmpty()) {
       URI uri = list.get(0).getUri();
       if (uri != null) {
         result = uri.toString();
@@ -69,7 +69,7 @@ public abstract class ConsulDiscoveryClientTemplate {
   protected abstract String extractPath();
 
   public String getRootUrl() {
-    if (rootUrl == null || rootUrl.isEmpty() || !IS_CACHE_DISCOVERY_RESULT) {
+    if (rootUrl == null || rootUrl.isEmpty() || !isCacheDiscoveryResult) {
       String retrievedUri = retrieveUriFromDiscoveryClient();
       if (retrievedUri != null && !retrievedUri.isEmpty()) {
         rootUrl = retrievedUri;

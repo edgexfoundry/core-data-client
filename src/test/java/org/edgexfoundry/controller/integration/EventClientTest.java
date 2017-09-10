@@ -31,11 +31,11 @@ import java.util.List;
 import javax.ws.rs.NotFoundException;
 
 import org.edgexfoundry.controller.EventClient;
-import org.edgexfoundry.controller.EventClientImpl;
 import org.edgexfoundry.controller.ReadingClient;
-import org.edgexfoundry.controller.ReadingClientImpl;
 import org.edgexfoundry.controller.ValueDescriptorClient;
-import org.edgexfoundry.controller.ValueDescriptorClientImpl;
+import org.edgexfoundry.controller.impl.EventClientImpl;
+import org.edgexfoundry.controller.impl.ReadingClientImpl;
+import org.edgexfoundry.controller.impl.ValueDescriptorClientImpl;
 import org.edgexfoundry.domain.common.ValueDescriptor;
 import org.edgexfoundry.domain.core.Event;
 import org.edgexfoundry.domain.core.Reading;
@@ -107,8 +107,8 @@ public class EventClientTest {
 
   @Test
   public void testEvent() {
-    Event e = client.event(id);
-    checkTestData(e, id);
+    Event event = client.event(id);
+    checkTestData(event, id);
   }
 
   @Test(expected = NotFoundException.class)
@@ -178,15 +178,15 @@ public class EventClientTest {
 
   @Test
   public void testUpdate() {
-    Event e = client.event(id);
-    e.setOrigin(12345);
-    assertTrue("Update did not complete successfully", client.update(e));
-    Event e2 = client.event(id);
-    assertEquals("Update did not work correclty", 12345, e2.getOrigin());
-    assertNotNull("Modified date is null", e2.getModified());
-    assertNotNull("Create date is null", e2.getCreated());
+    Event event = client.event(id);
+    event.setOrigin(12345);
+    assertTrue("Update did not complete successfully", client.update(event));
+    Event event2 = client.event(id);
+    assertEquals("Update did not work correclty", 12345, event2.getOrigin());
+    assertNotNull("Modified date is null", event2.getModified());
+    assertNotNull("Create date is null", event2.getCreated());
     assertTrue("Modified date and create date should be different after update",
-        e2.getModified() != e2.getCreated());
+        event2.getModified() != event2.getCreated());
   }
 
   @Test(expected = NotFoundException.class)

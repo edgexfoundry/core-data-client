@@ -16,11 +16,12 @@
  * @version: 1.0.0
  *******************************************************************************/
 
-package org.edgexfoundry.controller;
+package org.edgexfoundry.controller.impl;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.edgexfoundry.controller.PingCoreDataClient;
 import org.edgexfoundry.core.client.ConsulDiscoveryClientTemplate;
 import org.edgexfoundry.exception.controller.DataValidationException;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;

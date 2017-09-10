@@ -23,7 +23,7 @@ import static org.junit.Assert.assertEquals;
 import java.lang.reflect.Field;
 
 import org.edgexfoundry.controller.PingCoreDataClient;
-import org.edgexfoundry.controller.PingCoreDataClientImpl;
+import org.edgexfoundry.controller.impl.PingCoreDataClientImpl;
 import org.edgexfoundry.test.category.RequiresCoreDataRunning;
 import org.junit.Before;
 import org.junit.Test;
