@@ -238,11 +238,16 @@
 			</plugins>
 		</pluginManagement>			
 	</build>
-	<repositories>
-		<repository>
-			<id>org.edgexfoundry</id>
-			<name>EdgeX Foundry Nexus Repository</name>
-			<url>${nexusproxy}/content/groups/public/</url>
-		</repository>
+  <repositories>
+    <repository>
+      <id>staging</id>
+      <name>EdgeX Staging Repository</name>
+      <url>${nexusproxy}/${repobasepath}/staging</url>
+    </repository>
+    <repository>
+      <id>snapshots</id>
+      <name>EdgeX Snapshot Repository</name>
+      <url>${nexusproxy}/${repobasepath}/snapshots</url>
+    </repository>
 	</repositories>
 </project>
