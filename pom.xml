@@ -22,7 +22,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.edgexfoundry</groupId>
 	<artifactId>core-data-client</artifactId>
-	<version>0.2.0-SNAPSHOT</version>
+	<version>0.5.0-SNAPSHOT</version>
 	<name>EdgeX Foundry Core Data Client Library</name>
 	<description>EdgeX Foundry client library for calling on Core Data</description>
 
@@ -32,9 +32,9 @@
 		<junit.version>4.12</junit.version>
 		<resteasy.version>3.0.13.Final</resteasy.version>
 		<jackson-annotations.version>2.6.7</jackson-annotations.version>
-		<domain.version>0.2.0-SNAPSHOT</domain.version>
-		<exception.version>0.2.0-SNAPSHOT</exception.version>
-		<core-test.version>0.2.0-SNAPSHOT</core-test.version>
+		<domain.version>0.5.0-SNAPSHOT</domain.version>
+		<exception.version>0.5.0-SNAPSHOT</exception.version>
+		<core-test.version>0.5.0-SNAPSHOT</core-test.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<assembley-plugin.version>2.5.5</assembley-plugin.version>
